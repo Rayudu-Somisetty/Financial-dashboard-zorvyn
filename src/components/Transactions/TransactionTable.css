@@ -1,0 +1,238 @@
+.tx-table-wrap {
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+/* Toolbar */
+.tx-toolbar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 18px;
+  align-items: center;
+}
+
+.tx-search {
+  position: relative;
+  flex: 1;
+  max-width: 420px;
+}
+
+.tx-search__icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-tertiary);
+}
+
+.tx-search__input {
+  padding-left: 44px !important;
+}
+
+/* Filters */
+.tx-filters {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  padding: 20px;
+  background: var(--bg-tertiary);
+  border-radius: var(--border-radius-sm);
+  margin-bottom: 18px;
+  border: 1px solid var(--border-color);
+}
+
+.tx-filters__group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 150px;
+}
+
+.tx-filters__label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.tx-results-info {
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+
+/* Empty State */
+.tx-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 72px 24px;
+  text-align: center;
+}
+
+.tx-empty__icon {
+  font-size: 3.5rem;
+  margin-bottom: 20px;
+  filter: grayscale(0.3);
+}
+
+.tx-empty h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.tx-empty p {
+  font-size: 0.88rem;
+  color: var(--text-tertiary);
+}
+
+/* Table */
+.tx-table-container {
+  overflow-x: auto;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+
+[data-theme="dark"] .tx-table-container {
+  background: rgba(21, 24, 39, 0.5);
+}
+
+.tx-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tx-table thead {
+  background: var(--bg-tertiary);
+}
+
+[data-theme="dark"] .tx-table thead {
+  background: rgba(255,255,255,0.03);
+}
+
+.tx-table th {
+  padding: 16px 18px;
+  text-align: left;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  white-space: nowrap;
+  user-select: none;
+  transition: color var(--transition-fast);
+}
+
+.tx-table th:hover {
+  color: var(--accent-primary);
+}
+
+.tx-table td {
+  padding: 16px 18px;
+  font-size: 0.85rem;
+  border-top: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.tx-table tbody tr {
+  transition: background var(--transition-fast);
+}
+
+.tx-table tbody tr:hover {
+  background: var(--accent-primary-bg);
+}
+
+.sort-icon--inactive {
+  opacity: 0.25;
+}
+
+.tx-table__date {
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.tx-table__desc-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tx-table__emoji {
+  font-size: 1.2rem;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-tertiary);
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .tx-table__emoji {
+  background: rgba(255,255,255,0.05);
+}
+
+.tx-table__desc {
+  font-weight: 600;
+}
+
+.tx-table__category {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.tx-table__amount {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.9rem;
+}
+
+.tx-table__amount--income {
+  color: var(--accent-success);
+}
+
+.tx-table__amount--expense {
+  color: var(--accent-danger);
+}
+
+.tx-table__actions {
+  display: flex;
+  gap: 4px;
+}
+
+.tx-table__delete-btn:hover {
+  color: var(--accent-danger) !important;
+  background: var(--accent-danger-bg) !important;
+}
+
+@media (max-width: 768px) {
+  .tx-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .tx-search {
+    max-width: 100%;
+  }
+
+  .tx-filters {
+    flex-direction: column;
+  }
+
+  .tx-filters__group {
+    min-width: unset;
+  }
+}
