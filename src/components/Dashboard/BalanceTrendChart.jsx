@@ -6,6 +6,24 @@ import {
 } from 'recharts';
 import './Charts.css';
 
+function LatestDot(props) {
+  const { cx, cy, index, payload } = props;
+  if (cx == null || cy == null) return null;
+
+  const isCurrent = Boolean(payload?.isCurrent);
+  return (
+    <g>
+      <circle cx={cx} cy={cy} r={isCurrent ? 7 : 4.5} fill="#22d3ee" stroke="#0f172a" strokeWidth={isCurrent ? 2 : 1} />
+      {isCurrent && (
+        <>
+          <circle cx={cx} cy={cy} r={11} fill="transparent" stroke="#22d3ee" strokeWidth={1.5} strokeDasharray="3 2" />
+          <text x={cx + 12} y={cy - 10} className="chart-current-label">Current</text>
+        </>
+      )}
+    </g>
+  );
+}
+
 function CustomTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null;
   return (
@@ -22,7 +40,13 @@ function CustomTooltip({ active, payload, label }) {
 
 export default function BalanceTrendChart() {
   const { transactions } = useApp();
-  const data = useMemo(() => getMonthlyData(transactions), [transactions]);
+  const data = useMemo(() => {
+    const monthly = getMonthlyData(transactions);
+    return monthly.map((item, idx) => ({
+      ...item,
+      isCurrent: idx === monthly.length - 1,
+    }));
+  }, [transactions]);
 
   return (
     <div className="chart-card glass-card animate-fade-in-up">
@@ -64,11 +88,11 @@ export default function BalanceTrendChart() {
                 type="monotone"
                 dataKey="balance"
                 name="Balance"
-                stroke="#818cf8"
+                stroke="#22d3ee"
                 strokeWidth={3}
                 fill="url(#balanceGradient)"
-                dot={{ fill: '#818cf8', strokeWidth: 2, r: 4 }}
-                activeDot={{ r: 6, strokeWidth: 0 }}
+                dot={<LatestDot />}
+                activeDot={{ r: 7, strokeWidth: 0 }}
               />
             </AreaChart>
           </ResponsiveContainer>

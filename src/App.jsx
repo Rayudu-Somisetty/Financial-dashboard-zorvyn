@@ -12,7 +12,7 @@ export default function App() {
       <AppProvider>
         <div className="app-layout">
           <Sidebar />
-          <div className="main-content-wrapper" style={{ flex: 1 }}>
+          <div className="main-content-wrapper">
             <Header />
             <main className="main-content">
               <Routes>

@@ -1,124 +1,132 @@
-/* Shared chart styles */
 .chart-card {
-  padding: 28px;
+  padding: 22px;
+  border-radius: 20px;
 }
 
 .chart-card__header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .chart-card__title {
-  font-size: 1.05rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
+  font-family: var(--font-display);
+  font-size: 1.06rem;
+  letter-spacing: -0.02em;
 }
 
 .chart-card__subtitle {
+  margin-top: 4px;
+  color: var(--text-secondary);
   font-size: 0.78rem;
-  color: var(--text-tertiary);
-  margin-top: 5px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .chart-card__body {
-  position: relative;
+  min-height: 220px;
 }
 
 .chart-card__empty {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 200px;
+  min-height: 220px;
+  display: grid;
+  place-items: center;
   color: var(--text-tertiary);
-  font-size: 0.9rem;
-  font-weight: 500;
-}
-
-/* Custom tooltip */
-.chart-tooltip {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius-sm);
-  padding: 12px 16px;
-  box-shadow: var(--shadow-card);
-  min-width: 140px;
-}
-
-[data-theme="dark"] .chart-tooltip {
-  background: #1e2235;
-  border-color: rgba(255,255,255,0.08);
-}
-
-.chart-tooltip__label {
-  font-size: 0.72rem;
-  color: var(--text-tertiary);
-  margin-bottom: 6px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.chart-tooltip__value {
-  font-size: 0.88rem;
   font-weight: 700;
 }
 
-/* Spending breakdown layout */
+.chart-tooltip {
+  background: color-mix(in srgb, var(--bg-secondary) 86%, transparent);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(8px);
+  padding: 10px 12px;
+}
+
+.chart-tooltip__label {
+  color: var(--text-tertiary);
+  font-size: 0.7rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.chart-tooltip__value {
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.chart-current-label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  fill: var(--accent-primary-light);
+  letter-spacing: 0.02em;
+}
+
 .spending-layout {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 .donut-container {
   position: relative;
 }
 
+.donut-container :is(.recharts-sector, .recharts-pie-sector) {
+  cursor: pointer;
+}
+
 .donut-center {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
+  inset: 0;
+  display: grid;
+  place-content: center;
   pointer-events: none;
+  text-align: center;
 }
 
 .donut-center__label {
-  display: block;
-  font-size: 0.65rem;
+  font-size: 0.66rem;
   color: var(--text-tertiary);
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .donut-center__value {
-  display: block;
-  font-size: 1.3rem;
-  font-weight: 800;
-  color: var(--text-primary);
+  font-family: var(--font-display);
   letter-spacing: -0.02em;
-  margin-top: 2px;
+  font-size: 1.28rem;
 }
 
-/* Legend */
+.donut-center__value--selected {
+  font-size: 1.18rem;
+  text-shadow: 0 6px 18px color-mix(in srgb, var(--accent-primary) 30%, transparent);
+}
+
 .spending-legend {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
 }
 
 .spending-legend__item {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 0.82rem;
-  padding: 6px 10px;
-  border-radius: 8px;
+  flex-direction: column;
+  gap: 5px;
+  border-radius: 10px;
+  padding: 6px 8px;
   transition: background var(--transition-fast);
+}
+
+.spending-legend__top-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
 }
 
 .spending-legend__item:hover {
@@ -128,18 +136,38 @@
 .spending-legend__dot {
   width: 10px;
   height: 10px;
-  border-radius: 4px;
-  flex-shrink: 0;
+  border-radius: 999px;
 }
 
 .spending-legend__name {
   flex: 1;
   color: var(--text-secondary);
-  font-weight: 500;
+  font-size: 0.82rem;
 }
 
 .spending-legend__value {
-  font-weight: 700;
-  color: var(--text-primary);
-  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  font-size: 0.8rem;
+}
+
+.spending-legend__pct {
+  min-width: 44px;
+  text-align: right;
+  font-size: 0.74rem;
+  color: var(--text-tertiary);
+  font-weight: 800;
+}
+
+.spending-legend__bar-track {
+  height: 6px;
+  width: 100%;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--bg-tertiary) 78%, transparent);
+  overflow: hidden;
+}
+
+.spending-legend__bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width var(--transition-slow);
 }

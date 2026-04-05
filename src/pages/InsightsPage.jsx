@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import InsightCards from '../components/Insights/InsightCards';
 import MonthlyComparisonChart from '../components/Insights/MonthlyComparisonChart';
+import SpendingInsightDonut from '../components/Insights/SpendingInsightDonut';
 
 const item = {
   hidden: { opacity: 0, y: 40 },
@@ -21,6 +22,15 @@ export default function InsightsPage() {
         style={{ marginTop: 28 }}
       >
         <MonthlyComparisonChart />
+      </motion.div>
+
+      <motion.div
+        variants={item}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: "-50px" }}
+      >
+        <SpendingInsightDonut />
       </motion.div>
     </motion.div>
   );

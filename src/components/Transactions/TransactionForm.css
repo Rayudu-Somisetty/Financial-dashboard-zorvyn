@@ -1,7 +1,7 @@
 .tx-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
 .tx-form__group {
@@ -12,48 +12,47 @@
 }
 
 .tx-form__label {
-  font-size: 0.8rem;
-  font-weight: 600;
   color: var(--text-secondary);
+  font-size: 0.72rem;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
 }
 
 .tx-form__row {
   display: flex;
-  gap: 16px;
+  gap: 12px;
 }
 
 .tx-form__error {
-  font-size: 0.75rem;
   color: var(--accent-danger);
-  font-weight: 500;
+  font-size: 0.72rem;
+  font-weight: 600;
 }
 
 .input--error {
   border-color: var(--accent-danger) !important;
-  box-shadow: 0 0 0 3px var(--accent-danger-bg) !important;
+  box-shadow: 0 0 0 4px var(--accent-danger-bg) !important;
 }
 
-/* Type Toggle */
 .tx-form__type-toggle {
   display: flex;
-  border-radius: var(--border-radius-sm);
-  overflow: hidden;
+  border-radius: 12px;
   border: 1px solid var(--border-color);
+  overflow: hidden;
 }
 
 .tx-form__type-btn {
   flex: 1;
-  padding: 10px 16px;
-  border: none;
+  border: 0;
   background: var(--bg-tertiary);
   color: var(--text-secondary);
   font-family: var(--font-family);
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-size: 0.84rem;
+  font-weight: 700;
+  padding: 11px;
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: background var(--transition-fast), color var(--transition-fast);
 }
 
 .tx-form__type-btn--expense-active {
@@ -69,12 +68,20 @@
 .tx-form__actions {
   display: flex;
   justify-content: flex-end;
-  gap: 12px;
-  padding-top: 8px;
+  gap: 10px;
+  margin-top: 4px;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 640px) {
   .tx-form__row {
     flex-direction: column;
+  }
+
+  .tx-form__actions {
+    justify-content: stretch;
+  }
+
+  .tx-form__actions .btn {
+    flex: 1;
   }
 }

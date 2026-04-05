@@ -42,7 +42,7 @@ const initialState = {
   role: savedState?.role || 'admin',
   filters: {
     search: '',
-    category: 'all',
+    category: [],
     type: 'all',
     dateFrom: '',
     dateTo: '',
@@ -142,7 +142,9 @@ function getFilteredTransactions(state) {
       t.category.toLowerCase().includes(q)
     );
   }
-  if (category !== 'all') {
+  if (Array.isArray(category) && category.length > 0) {
+    result = result.filter(t => category.includes(t.category));
+  } else if (typeof category === 'string' && category !== 'all') {
     result = result.filter(t => t.category === category);
   }
   if (type !== 'all') {

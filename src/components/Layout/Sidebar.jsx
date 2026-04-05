@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useApp } from '../../context/AppContext';
 import {
   LayoutDashboard,
@@ -10,8 +10,10 @@ import {
   Eye,
   ChevronLeft,
   ChevronRight,
+  Search,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import ProfileModal from './ProfileModal';
 import './Sidebar.css';
 
 const navItems = [
@@ -21,19 +23,74 @@ const navItems = [
 ];
 
 export default function Sidebar() {
-  const { theme, toggleTheme, role, setRole } = useApp();
+  const { theme, toggleTheme, role, setRole, setFilter } = useApp();
   const [collapsed, setCollapsed] = useState(false);
-  const location = useLocation();
+  const [quickSearch, setQuickSearch] = useState('');
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [userProfile, setUserProfile] = useState({
+    name: 'Rayudu Somi Setty',
+    email: 'rayudu.setty@zorvyn.com',
+    age: 28,
+    role: 'Product Analyst',
+    initials: 'RS',
+  });
+  const navigate = useNavigate();
+  const quickSearchRef = useRef(null);
+
+  useEffect(() => {
+    function onShortcut(event) {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault();
+        quickSearchRef.current?.focus();
+      }
+    }
+    window.addEventListener('keydown', onShortcut);
+    return () => window.removeEventListener('keydown', onShortcut);
+  }, []);
+
+  function handleQuickSearchSubmit(event) {
+    event.preventDefault();
+    setFilter('search', quickSearch.trim());
+    navigate('/transactions');
+  }
+
+  function handleSaveProfile(updatedProfile) {
+    setUserProfile(updatedProfile);
+  }
 
   return (
     <>
       <aside className={`sidebar ${collapsed ? 'sidebar--collapsed' : ''}`}>
-        <div className="sidebar__brand">
-          <div className="sidebar__logo">
-            <span className="sidebar__logo-icon">Z</span>
+        <div className="sidebar__header">
+          <div className="sidebar__brand">
+            <div className="sidebar__logo">
+              <span className="sidebar__logo-icon">Z</span>
+            </div>
+            {!collapsed && <span className="sidebar__brand-text">Zorvyn</span>}
           </div>
-          {!collapsed && <span className="sidebar__brand-text">Zorvyn</span>}
+          <button
+            className="sidebar__collapse-btn sidebar__collapse-btn--top"
+            onClick={() => setCollapsed(!collapsed)}
+            title={collapsed ? 'Expand' : 'Collapse'}
+            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+          </button>
         </div>
+
+        {!collapsed && (
+          <form className="sidebar__search" onSubmit={handleQuickSearchSubmit}>
+            <Search size={15} />
+            <input
+              ref={quickSearchRef}
+              type="text"
+              value={quickSearch}
+              onChange={(event) => setQuickSearch(event.target.value)}
+              placeholder="Quick Search (Ctrl+K)"
+              aria-label="Quick Search"
+            />
+          </form>
+        )}
 
         <nav className="sidebar__nav">
           {navItems.map(item => (
@@ -52,6 +109,20 @@ export default function Sidebar() {
         </nav>
 
         <div className="sidebar__footer">
+          <button
+            className="sidebar__profile"
+            onClick={() => setProfileOpen(true)}
+            aria-label="Open profile"
+          >
+            <div className="sidebar__profile-avatar">{userProfile.initials}</div>
+            {!collapsed && (
+              <div className="sidebar__profile-meta">
+                <strong>{userProfile.name}</strong>
+                <span>{userProfile.role}</span>
+              </div>
+            )}
+          </button>
+
           {/* Role Switcher */}
           <div className="sidebar__role" title="Switch Role">
             <button
@@ -68,17 +139,16 @@ export default function Sidebar() {
             {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
             {!collapsed && <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>}
           </button>
-
-          {/* Collapse Toggle */}
-          <button
-            className="sidebar__collapse-btn"
-            onClick={() => setCollapsed(!collapsed)}
-            title={collapsed ? 'Expand' : 'Collapse'}
-          >
-            {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
-          </button>
         </div>
       </aside>
+
+      {/* Profile Modal */}
+      <ProfileModal
+        isOpen={profileOpen}
+        onClose={() => setProfileOpen(false)}
+        user={userProfile}
+        onSave={handleSaveProfile}
+      />
 
       {/* Mobile Bottom Nav */}
       <nav className="mobile-nav">
