@@ -6,6 +6,10 @@ A premium, interactive finance dashboard built with **React + Vite** featuring r
 ![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
+## Live Demo
+
+https://financial-dashboard-zorvyn-asst-som.vercel.app/#/
+
 ---
 
 ## ✨ Features
