@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import { AppProvider } from './context/AppContext';
 import Sidebar from './components/Layout/Sidebar';
 import Header from './components/Layout/Header';
@@ -8,7 +8,7 @@ import InsightsPage from './pages/InsightsPage';
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <AppProvider>
         <div className="app-layout">
           <Sidebar />
@@ -24,6 +24,6 @@ export default function App() {
           </div>
         </div>
       </AppProvider>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
