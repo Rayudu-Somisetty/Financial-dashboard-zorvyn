@@ -165,10 +165,30 @@
   color: var(--accent-primary);
 }
 
+.tx-table__th--static,
+.tx-table__th--static:hover {
+  cursor: default;
+  color: var(--text-tertiary);
+}
+
 .tx-table td {
   padding: 12px 13px;
   border-top: 1px solid var(--border-color);
   font-size: 0.84rem;
+}
+
+.tx-table__check-col {
+  width: 42px;
+  text-align: center !important;
+  padding-left: 10px !important;
+  padding-right: 6px !important;
+}
+
+.tx-table__checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent-primary);
+  cursor: pointer;
 }
 
 .tx-table tbody tr {

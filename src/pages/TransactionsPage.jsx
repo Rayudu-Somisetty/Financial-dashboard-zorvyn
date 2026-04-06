@@ -2,10 +2,12 @@ import { useMemo, useState } from 'react';
 import { useApp } from '../context/AppContext';
 import TransactionTable from '../components/Transactions/TransactionTable';
 import TransactionForm from '../components/Transactions/TransactionForm';
-import { Plus, Download } from 'lucide-react';
+import DayWiseSummaryModal from '../components/Transactions/DayWiseSummaryModal';
+import { Plus, Download, Table2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getMonthlyData, getTotals } from '../data/mockData';
 import './TransactionsPage.css';
+
 function exportToCSV(transactions) {
   const headers = ['Date', 'Description', 'Amount', 'Category', 'Type'];
   const rows = transactions.map(t => [
@@ -28,6 +30,7 @@ function exportToCSV(transactions) {
 export default function TransactionsPage() {
   const { role, filteredTransactions, transactions, addTransaction, updateTransaction } = useApp();
   const [showForm, setShowForm] = useState(false);
+  const [showDayWiseSummary, setShowDayWiseSummary] = useState(false);
   const [editTx, setEditTx] = useState(null);
 
   const totals = useMemo(() => getTotals(transactions), [transactions]);
@@ -110,6 +113,15 @@ export default function TransactionsPage() {
           <Download size={16} />
           Export CSV
         </button>
+        <button
+          className="btn btn-secondary"
+          onClick={() => setShowDayWiseSummary(true)}
+          disabled={filteredTransactions.length === 0}
+          title="View day-wise transaction summary"
+        >
+          <Table2 size={16} />
+          Day-wise Summary
+        </button>
       </div>
 
       <motion.div 
@@ -124,6 +136,9 @@ export default function TransactionsPage() {
       <AnimatePresence>
         {showForm && (
           <TransactionForm transaction={editTx} onClose={handleClose} />
+        )}
+        {showDayWiseSummary && (
+          <DayWiseSummaryModal isOpen={showDayWiseSummary} onClose={() => setShowDayWiseSummary(false)} transactions={filteredTransactions} />
         )}
       </AnimatePresence>
     </motion.div>

@@ -2,6 +2,24 @@
   padding: 22px;
   border-radius: 20px;
   position: relative;
+  border: 0;
+  background: inherit;
+  text-align: left;
+  font-family: inherit;
+}
+
+.summary-card:not(:disabled) {
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.summary-card:not(:disabled):hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
+}
+
+.summary-card:disabled {
+  cursor: default;
 }
 
 .summary-card::after {
@@ -71,7 +89,7 @@
 .summary-card__currency {
   font-size: 1.05rem;
   font-weight: 700;
-  color: var(--text-secondary);
+  color: var(--text-primary);
 }
 
 .summary-card__amount {
@@ -79,6 +97,7 @@
   font-family: var(--font-display);
   font-weight: 800;
   letter-spacing: -0.03em;
+  color: var(--text-primary);
   animation: count-up 0.5s ease both;
 }
 

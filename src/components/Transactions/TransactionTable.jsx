@@ -60,6 +60,7 @@ export default function TransactionTable({ onEdit, onDuplicate, onAddNote }) {
     resetFilters,
     sortConfig,
     setSort,
+    dispatch,
     role,
     deleteTransaction,
   } = useApp();
@@ -67,6 +68,7 @@ export default function TransactionTable({ onEdit, onDuplicate, onAddNote }) {
   const [showFilters, setShowFilters] = useState(false);
   const [showCategoryMenu, setShowCategoryMenu] = useState(false);
   const [selectedTx, setSelectedTx] = useState(null);
+  const [selectedIds, setSelectedIds] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const categories = Object.keys(CATEGORIES);
   const selectedCategories = Array.isArray(filters.category)
@@ -102,6 +104,11 @@ export default function TransactionTable({ onEdit, onDuplicate, onAddNote }) {
     return () => clearTimeout(timeout);
   }, [loadingKey]);
 
+  useEffect(() => {
+    const visibleIds = new Set(filteredTransactions.map(tx => tx.id));
+    setSelectedIds(prev => prev.filter(id => visibleIds.has(id)));
+  }, [filteredTransactions]);
+
   const SortIcon = ({ column }) => {
     if (sortConfig.key !== column) return <ArrowUpDown size={12} className="sort-icon--inactive" />;
     return sortConfig.direction === 'asc' ? <ArrowUp size={12} /> : <ArrowDown size={12} />;
@@ -115,8 +122,30 @@ export default function TransactionTable({ onEdit, onDuplicate, onAddNote }) {
   }
 
   function handleRowClick(tx, eventTarget) {
-    if (eventTarget.closest('button')) return;
+    if (eventTarget.closest('button') || eventTarget.closest('input')) return;
     setSelectedTx(tx);
+  }
+
+  function toggleSelectOne(id) {
+    setSelectedIds(prev => (prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]));
+  }
+
+  function toggleSelectAll() {
+    const visibleIds = filteredTransactions.map(tx => tx.id);
+    if (selectedIds.length === visibleIds.length) {
+      setSelectedIds([]);
+      return;
+    }
+    setSelectedIds(visibleIds);
+  }
+
+  function handleBulkDelete() {
+    if (selectedIds.length === 0) return;
+    const confirmed = window.confirm(`Delete ${selectedIds.length} selected transaction${selectedIds.length > 1 ? 's' : ''}?`);
+    if (!confirmed) return;
+    selectedIds.forEach(id => deleteTransaction(id));
+    setSelectedIds([]);
+    setSelectedTx(null);
   }
 
   function handleAddNoteClick(tx) {
@@ -132,6 +161,16 @@ export default function TransactionTable({ onEdit, onDuplicate, onAddNote }) {
     filters.dateTo ||
     selectedCategories.length,
   );
+
+  const hasActiveSort = sortConfig.key !== 'date' || sortConfig.direction !== 'desc';
+  const hasResettableState = hasActiveFilters || hasActiveSort;
+
+  function handleResetAllControls() {
+    resetFilters();
+    if (hasActiveSort) {
+      dispatch({ type: 'SET_SORT', payload: { key: 'date', direction: 'desc' } });
+    }
+  }
 
   return (
     <div className="tx-table-wrap">
@@ -154,6 +193,26 @@ export default function TransactionTable({ onEdit, onDuplicate, onAddNote }) {
             <Filter size={16} />
             Filters
           </button>
+          {hasResettableState && (
+            <button
+              className="btn btn-ghost"
+              onClick={handleResetAllControls}
+              title="Reset filters and sorting"
+            >
+              <X size={16} />
+              Reset
+            </button>
+          )}
+          {role === 'admin' && selectedIds.length > 0 && (
+            <button
+              className="btn btn-danger"
+              onClick={handleBulkDelete}
+              title={`Delete ${selectedIds.length} selected`}
+            >
+              <Trash2 size={16} />
+              Delete Selected ({selectedIds.length})
+            </button>
+          )}
         </div>
 
         {showFilters && (
@@ -260,6 +319,17 @@ export default function TransactionTable({ onEdit, onDuplicate, onAddNote }) {
           <table className="tx-table">
             <thead>
               <tr>
+                {role === 'admin' && (
+                  <th className="tx-table__check-col tx-table__th--static">
+                    <input
+                      type="checkbox"
+                      className="tx-table__checkbox"
+                      checked={filteredTransactions.length > 0 && selectedIds.length === filteredTransactions.length}
+                      onChange={toggleSelectAll}
+                      aria-label="Select all transactions"
+                    />
+                  </th>
+                )}
                 <th onClick={() => setSort('date')}>
                   Date <SortIcon column="date" />
                 </th>
@@ -289,6 +359,18 @@ export default function TransactionTable({ onEdit, onDuplicate, onAddNote }) {
                     className={selectedTx?.id === tx.id ? 'tx-table__row--selected' : ''}
                     onClick={(event) => handleRowClick(tx, event.target)}
                   >
+                  {role === 'admin' && (
+                    <td className="tx-table__check-col">
+                      <input
+                        type="checkbox"
+                        className="tx-table__checkbox"
+                        checked={selectedIds.includes(tx.id)}
+                        onChange={() => toggleSelectOne(tx.id)}
+                        onClick={event => event.stopPropagation()}
+                        aria-label={`Select transaction ${tx.description}`}
+                      />
+                    </td>
+                  )}
                   <td className="tx-table__date">
                     {new Date(tx.date).toLocaleDateString('en-US', {
                       month: 'short',
