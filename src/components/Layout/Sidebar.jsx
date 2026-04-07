@@ -29,8 +29,8 @@ export default function Sidebar() {
   const [profileOpen, setProfileOpen] = useState(false);
   const [userProfile, setUserProfile] = useState({
     name: 'Rayudu Somi Setty',
-    email: 'rayudu.setty@zorvyn.com',
-    age: 28,
+    email: 'somisetty2005@gmail.com',
+    age: 21,
     role: 'Product Analyst',
     initials: 'RS',
   });
